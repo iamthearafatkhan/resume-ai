@@ -15,7 +15,7 @@ app = FastAPI(title="Resume ATS & Match API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"], 
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -46,8 +46,7 @@ async def analyze_resume(file: UploadFile = File(...)):
         print("=========================\n")
         raise HTTPException(status_code=500, detail=str(e))
 
-# backend/app/main.py
-# ... (imports) ...
+
 
 @app.post("/match", response_model=MatchResponse)
 async def match_job(
