@@ -84,12 +84,5 @@ Unlike traditional resume analyzers, this platform is built with a privacy-first
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 
-### What makes this look professional:
-1. **Badges at the top** immediately show the tech stack.
-2. **Blockquotes (`>`)** are used for the tagline to make it stand out.
-3. **Tables** are used for the Tech Stack to keep it aligned and readable.
-4. **Consistent Code Blocks** with syntax highlighting hints (`bash`).
-5. **Clear Segregation** between Backend and Frontend setup instructions.
-6. **Emoji headers** make it easy for recruiters or developers to scan the document quickly.
 
 
