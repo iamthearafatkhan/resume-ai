@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-[#050510] text-white min-h-screen selection:bg-brand-pink selection:text-white;
+        /* Animated Grid Background */
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: center center;
+    }
+}
+
+
+
+@media print {
+
+    /* Force white background for the entire page */
+    body,
+    html,
+    #root {
+        background: white !important;
+        background-image: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Hide UI elements that shouldn't be printed */
+    nav,
+    footer,
+    .no-print {
+        display: none !important;
+    }
+
+    /* Ensure colors print exactly as they look on screen */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Prevent page breaks inside the CV */
+    .print-area {
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
