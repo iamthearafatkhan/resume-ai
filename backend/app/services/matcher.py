@@ -1,15 +1,10 @@
 # backend/app/services/matcher.py
 import re
-from sentence_transformers import SentenceTransformer, util
+import numpy as np
+from huggingface_hub import AsyncInferenceClient
 from sklearn.feature_extraction.text import TfidfVectorizer
 from app.services.ats_scorer import extract_skills
-
-_model = None
-def get_model():
-    global _model
-    if _model is None:
-        _model = SentenceTransformer("BAAI/bge-small-en-v1.5")
-    return _model
+from app.config import settings
 
 # Huge list of words to IGNORE (Corporate fluff & generic verbs)
 IGNORE_WORDS = {
@@ -28,7 +23,6 @@ def extract_requirements(jd_text: str) -> str:
     return jd_text
 
 def extract_dynamic_keywords(jd_text: str, resume_text: str, top_n: int = 15):
-    # ngram_range=(1, 2) stops 3-word nonsense phrases
     vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 1), max_features=1000)
     try:
         tfidf_matrix = vectorizer.fit_transform([jd_text, resume_text])
@@ -43,7 +37,6 @@ def extract_dynamic_keywords(jd_text: str, resume_text: str, top_n: int = 15):
         
         for kw in jd_keywords:
             kw_lower = kw.lower()
-            # Skip if any word in the phrase is in our ignore list
             if len(kw) < 4 or any(word in IGNORE_WORDS for word in kw_lower.split()):
                 continue
                 
@@ -57,10 +50,23 @@ def extract_dynamic_keywords(jd_text: str, resume_text: str, top_n: int = 15):
                 break
                 
         return matched, missing
-    except Exception as e:
+    except Exception:
         return [], []
 
-def compute_match(resume_text: str, jd_text: str, structural_score: float = 0) -> dict:
+async def get_embedding(text: str) -> list[float]:
+    """Uses Hugging Face Inference API for embeddings (No local model memory)."""
+    if not settings.HF_TOKEN:
+        return []
+    client = AsyncInferenceClient(token=settings.HF_TOKEN)
+    # Using a lightweight embedding model via API
+    response = await client.feature_extraction(
+        text,
+        model="BAAI/bge-small-en-v1.5",
+        normalize=True # Helps with cosine similarity
+    )
+    return response
+
+async def compute_match(resume_text: str, jd_text: str, structural_score: float = 0) -> dict:
     requirements_text = extract_requirements(jd_text)
     dyn_matched, dyn_missing = extract_dynamic_keywords(requirements_text, resume_text, top_n=15)
     
@@ -75,14 +81,20 @@ def compute_match(resume_text: str, jd_text: str, structural_score: float = 0) -
     total_req = len(matched) + len(missing)
     skill_score = (len(matched) / total_req * 100) if total_req > 0 else 0
 
+    # Semantic Similarity via API
+    semantic_score = 50 # Default fallback
     try:
-        model = get_model()
-        emb_resume = model.encode(resume_text, convert_to_tensor=True)
-        emb_jd = model.encode(requirements_text, convert_to_tensor=True)
-        cosine_sim = util.cos_sim(emb_resume, emb_jd).item()
-        semantic_score = max(0, min(100, (cosine_sim - 0.3) / 0.5 * 100))
-    except Exception:
-        semantic_score = 50 
+        if settings.HF_TOKEN:
+            emb_resume = await get_embedding(resume_text)
+            emb_jd = await get_embedding(requirements_text)
+            
+            if emb_resume and emb_jd:
+                # Cosine similarity
+                v1, v2 = np.array(emb_resume), np.array(emb_jd)
+                cosine_sim = np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+                semantic_score = max(0, min(100, (cosine_sim - 0.3) / 0.5 * 100))
+    except Exception as e:
+        print(f"API Embedding Error: {e}")
 
     final_score = (skill_score * 0.50) + (semantic_score * 0.25) + (structural_score * 0.25)
 

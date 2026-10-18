@@ -46,6 +46,9 @@ async def analyze_resume(file: UploadFile = File(...)):
         print("=========================\n")
         raise HTTPException(status_code=500, detail=str(e))
 
+# backend/app/main.py
+# ... (imports) ...
+
 @app.post("/match", response_model=MatchResponse)
 async def match_job(
     file: UploadFile = File(...),
@@ -56,10 +59,10 @@ async def match_job(
         raw_bytes = await file.read()
         resume_text = extract_text(raw_bytes, file.filename)
         
-        # Get the ATS score to use as the structural score in the match calculation
         ats_result = compute_ats_score(resume_text)
         
-        match_result = compute_match(resume_text, job_description, ats_result["overall_score"])
+        # ADD AWAIT HERE
+        match_result = await compute_match(resume_text, job_description, ats_result["overall_score"])
 
         if include_feedback and settings.HF_TOKEN:
             try:
@@ -78,7 +81,6 @@ async def match_job(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# backend/app/main.py
 
 
 
