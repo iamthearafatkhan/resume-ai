@@ -16,7 +16,7 @@ export default function Navbar() {
             <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-3">
                     <Logo size={35} animate={true} />
-                    <span className="text-xl font-bold text-white tracking-widest">RESUME</span>
+                    <span className="text-xl font-bold text-white tracking-widest">CVELORA</span>
                 </Link>
 
 

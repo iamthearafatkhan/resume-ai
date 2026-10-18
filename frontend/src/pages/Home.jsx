@@ -19,13 +19,13 @@ export default function Home() {
                         <Zap size={16} /> Powered by Real NLP & Deterministic AI
                     </div>
 
+
                     <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-[1.1] tracking-tight">
                         Beat the <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-pink to-brand-orange">ATS.</span><br />
                         Land the Interview.
                     </h1>
-
                     <p className="text-lg text-white/60 mb-8 max-w-md leading-relaxed">
-                        Upload your resume to get a real, explainable ATS score. Paste a job description to uncover exact skill gaps and get actionable AI recommendations.
+                        Welcome to CVELORA. Upload your resume to get a real, explainable ATS score. Paste a job description to uncover exact skill gaps and get actionable AI recommendations.
                     </p>
 
                     <Link to="/analyze">

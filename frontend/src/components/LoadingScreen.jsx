@@ -25,13 +25,14 @@ export default function LoadingScreen() {
 
                 <Logo size={100} />
 
+
                 <motion.h1
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="mt-6 text-2xl font-bold text-white tracking-widest"
+                    initial={{ opacity: 0, letterSpacing: "0.5em", y: 10 }}
+                    animate={{ opacity: 1, letterSpacing: "0.1em", y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.8 }}
+                    className="mt-6 text-3xl font-bold text-white tracking-widest"
                 >
-                    RESUME
+                    CVELORA
                 </motion.h1>
 
                 {/* Loading Text Simulation */}
