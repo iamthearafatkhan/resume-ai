@@ -18,7 +18,7 @@ export default function Navbar() {
                     <Logo size={35} animate={true} />
                     {/* Modern gradient text for the brand name */}
                     <span className="text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-brand-pink to-brand-orange group-hover:from-brand-orange group-hover:to-brand-pink transition-all duration-300">
-                        CVELORA
+                        CVelora
                     </span>
                 </Link>
 
