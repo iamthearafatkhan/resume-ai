@@ -15,8 +15,12 @@ app = FastAPI(title="Resume ATS & Match API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=False,
+    allow_origins=[
+        "http://localhost:5173", 
+        "https://cvelora.vercel.app", # Add your exact Vercel URL
+        "https://*.vercel.app"        # Allows preview deployments
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
