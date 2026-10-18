@@ -25,7 +25,7 @@ export default function Home() {
                         Land the Interview.
                     </h1>
                     <p className="text-lg text-white/60 mb-8 max-w-md leading-relaxed">
-                        Welcome to CVELORA. Upload your resume to get a real, explainable ATS score. Paste a job description to uncover exact skill gaps and get actionable AI recommendations.
+                        Welcome to <span className="text-white font-semibold">CVelora</span>. Upload your resume to get a real, explainable ATS score. Paste a job description to uncover exact skill gaps and get actionable AI recommendations.
                     </p>
 
                     <Link to="/analyze">

@@ -14,11 +14,13 @@ export default function Navbar() {
             className="fixed top-0 left-0 right-0 z-40 bg-black/30 backdrop-blur-md border-b border-white/10"
         >
             <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-                <Link to="/" className="flex items-center gap-3">
+                <Link to="/" className="flex items-center gap-3 group">
                     <Logo size={35} animate={true} />
-                    <span className="text-xl font-bold text-white tracking-widest">CVELORA</span>
+                    {/* Modern gradient text for the brand name */}
+                    <span className="text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-brand-pink to-brand-orange group-hover:from-brand-orange group-hover:to-brand-pink transition-all duration-300">
+                        CVELORA
+                    </span>
                 </Link>
-
 
                 <div className="flex gap-6">
                     {["Home", "Analyze", "Builder"].map((item) => {
@@ -28,10 +30,13 @@ export default function Navbar() {
 
                         const isActive = location.pathname === path;
                         return (
-                            <Link key={item} to={path} className="relative text-white/80 hover:text-white transition-colors py-2">
+                            <Link key={item} to={path} className="relative text-white/80 hover:text-white transition-colors py-2 font-medium">
                                 {item}
                                 {isActive && (
-                                    <motion.div layoutId="underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-orange" />
+                                    <motion.div
+                                        layoutId="underline"
+                                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-orange"
+                                    />
                                 )}
                             </Link>
                         );
